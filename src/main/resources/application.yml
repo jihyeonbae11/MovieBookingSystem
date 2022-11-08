@@ -10,7 +10,7 @@ spring:
 #    username: vtw
 #    password: vtw123#
   jpa:
-    show-sql: true
+    show-sql: true # sql 로그 출력
     hibernate:
       ddl-auto: create-drop
     properties:
