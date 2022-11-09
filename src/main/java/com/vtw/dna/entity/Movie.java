@@ -12,7 +12,7 @@ public class Movie extends CommonDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long movieId;
+    private Long movieId;
 
     @Column(nullable = false, length = 100)
     private String movieName;
