@@ -1,6 +1,8 @@
 package com.vtw.dna.employee;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import java.util.Date;
 
 @Entity
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employee {
 
     @Id

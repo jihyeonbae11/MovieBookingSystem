@@ -5,6 +5,8 @@ import com.vtw.dna.repository.BookingRepository;
 import com.vtw.dna.repository.MovieRepository;
 import com.vtw.dna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,13 +18,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MovieService {
 
-    private BookingRepository bookingRepository;
-    private MovieRepository movieRepository;
-    private UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+    private final MovieRepository movieRepository;
+    private final UserRepository userRepository;
 
-    // 전체 영화 조회
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    // 영화 제목으로 조회
+    public Page<Movie> findMovies(Pageable pageable, String searchName) {
+        return movieRepository.findAllByMovieNameContains(pageable, searchName);
     }
 
     // 장르별 영화 리스트 조회
@@ -31,9 +33,8 @@ public class MovieService {
     }
 
     // 영화 ID로 영화를 조회
-    public Movie findMovie(long movieId) {
+    public Movie findMovie(Long movieId) {
         return Optional.ofNullable(movieRepository.findByMovieId(movieId)).orElseThrow(NullPointerException::new);
     }
-
 
 }

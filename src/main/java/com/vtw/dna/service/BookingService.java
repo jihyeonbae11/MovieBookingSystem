@@ -4,55 +4,65 @@ import com.vtw.dna.entity.Booking;
 import com.vtw.dna.entity.Movie;
 import com.vtw.dna.entity.User;
 import com.vtw.dna.repository.BookingRepository;
-import com.vtw.dna.repository.MovieRepository;
-import com.vtw.dna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.awt.print.Book;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class BookingService {
 
-    private BookingRepository bookingRepository;
-    private UserService userService;
-    private MovieService movieService;
+    private final BookingRepository bookingRepository;
+    private final UserService userService;
+    private final MovieService movieService;
 
-    // 예매 ID로 예매내역 조회
-    public Booking getBooking(long bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(NullPointerException::new);
+    // 예매번호로 예매내역 list 조회
+    public Page<Booking> findBookings(Pageable pageable, String searchName) {
+        return bookingRepository.findAllByCinemaContains(pageable, searchName);
     }
+
+    // 예매번호로 해당 예매정보 조회
+    public Booking findBooking(Long bookingId) {
+        return bookingRepository.findByBookingId(bookingId);
+    }
+
+//    public Optional<Object> findByBookingId(Long bookingId) {
+//        return bookingRepository.findByBookingId(bookingId).orElseThrow(NullPointerException::new);
+//    }
 
     // 사용자 ID로 예매내역 list 조회
-    public List<Booking> findBookings(String userId) {
-        return bookingRepository.findByUser(userService.findUser(userId));
-    }
+//    public Page<Booking> findBookings(Pageable pageable, String userId) {
+//        return bookingRepository.findByUserIdContains(pageable, userId, userService.findUser(userId));
+//    }
 
     // 예매 등록
-    public Booking createBooking(String userId, long movieId, String cinema, Integer persons, LocalDateTime showTime) {
-        User user = userService.findUser(userId);
-        Movie movie = movieService.findMovie(movieId);
-        Booking booking = new Booking(user, movie, cinema, persons, showTime);
+    public Booking createBooking(Booking booking) {
+
+//        String userId, Long movieId, String cinema, Integer persons, LocalDateTime showTime
+        User user = userService.findUser(booking.getUser().getUserId());
+        Movie movie = movieService.findMovie(booking.getMovie().getMovieId());
+
+        booking.setUser(user);
+        booking.setMovie(movie);
+
         return bookingRepository.save(booking);
     }
 
     // 예매내역 수정
-    public Booking updateBooking(long bookingId, String cinema, Integer persons, LocalDateTime showTime) {
-        Booking booking = getBooking(bookingId);
+    public Booking updateBooking(Long bookingId, String cinema, Integer persons, LocalDateTime showTime) {
+        Booking booking = findBooking(bookingId);
         booking.update(cinema, persons, showTime);
         return booking;
     }
 
     // 예매내역 삭제
-    public boolean deleteBooking(long bookingId) {
-        Booking booking = getBooking(bookingId);
+    public boolean deleteBooking(Long bookingId) {
+        Booking booking = findBooking(bookingId);
         bookingRepository.delete(booking);
         return true;
     }

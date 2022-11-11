@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor

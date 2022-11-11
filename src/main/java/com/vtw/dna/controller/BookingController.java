@@ -4,11 +4,13 @@ import com.vtw.dna.entity.Booking;
 import com.vtw.dna.service.BookingService;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("bookings")
@@ -17,23 +19,40 @@ public class BookingController {
     @Setter(onMethod_ = @Autowired)
     private BookingService bookingService;
 
-    // 해당 유저의 예매내역 조회
-    @GetMapping(value="/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Booking> getBookings(@PathVariable("userId") String userId) throws Exception {
+    // 예매내역 list 조회
+    @GetMapping
+    public Page<Booking> list(@RequestParam("page") int page,
+                              @RequestParam("size") int size,
+                              @RequestParam(value = "sortBy", defaultValue = "bookingId") String sortBy,
+                              @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir,
+                              @RequestParam(value = "filter", defaultValue = " ") String filter) throws Exception {
 
-        try { return bookingService.findBookings(userId); }
-        catch(Exception e) { throw new Exception (e); }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDir), sortBy));
+        Page<Booking> bookings = bookingService.findBookings(pageable, filter);
+
+        return bookings;
+
+    }
+
+    // 해당 예매내역 조회
+    @GetMapping("/{bookingId}")
+    public Booking find(@PathVariable Long bookingId) {
+        Booking booking = bookingService.findBooking(bookingId);
+
+        return booking;
     }
 
     // 예매하기
-    @PostMapping(value = "/{userId}")
-    public Booking createBooking(@PathVariable String userId,
-                                 @RequestParam Long movieId,
-                                 @RequestParam String cinema,
-                                 @RequestParam Integer persons,
-                                 @RequestParam LocalDateTime showTime) throws Exception {
+    @PostMapping
+    public Booking createBooking(@RequestBody Booking booking) {
 
-        return bookingService.createBooking(userId, movieId, cinema, persons, showTime);
+//                                     String userId,
+//                                 @RequestParam Long movieId,
+//                                 @RequestParam String cinema,
+//                                 @RequestParam Integer persons,
+//                                 @RequestParam LocalDateTime showTime) throws Exception {
+
+        return bookingService.createBooking(booking);
     }
 
     // 해당 예매내역 수정
