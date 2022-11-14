@@ -62,15 +62,17 @@ public class InitDd {
         movieRepository.save(movie7);
 
         Booking booking1 = new Booking(1L, "CGV", 3, LocalDateTime.now(), user1, movie1);
-        Booking booking2 = new Booking(2L, "CGV", 2, LocalDateTime.now(), user2, movie4);
+        Booking booking2 = new Booking(2L, "MEGABOX", 2, LocalDateTime.now(), user2, movie4);
         Booking booking3 = new Booking(3L, "CGV", 1, LocalDateTime.now(), user1, movie2);
         Booking booking4 = new Booking(4L, "CGV", 3, LocalDateTime.now(), user3, movie4);
+        Booking booking5 = new Booking(5L, "롯데시네마", 2, LocalDateTime.now(), user5, movie7);
 
 
         bookingRepository.save(booking1);
         bookingRepository.save(booking2);
         bookingRepository.save(booking3);
         bookingRepository.save(booking4);
+        bookingRepository.save(booking5);
 
         Employee employee1 = new Employee(1L, "hien", Gender.Female, null);
 

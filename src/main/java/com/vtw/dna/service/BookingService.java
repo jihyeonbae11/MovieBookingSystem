@@ -31,37 +31,27 @@ public class BookingService {
         return bookingRepository.findByBookingId(bookingId);
     }
 
-//    public Optional<Object> findByBookingId(Long bookingId) {
-//        return bookingRepository.findByBookingId(bookingId).orElseThrow(NullPointerException::new);
-//    }
-
-    // 사용자 ID로 예매내역 list 조회
-//    public Page<Booking> findBookings(Pageable pageable, String userId) {
-//        return bookingRepository.findByUserIdContains(pageable, userId, userService.findUser(userId));
-//    }
-
     // 예매 등록
-    public Booking createBooking(Booking booking) {
+    public Booking create(Booking booking) {
 
-//        String userId, Long movieId, String cinema, Integer persons, LocalDateTime showTime
         User user = userService.findUser(booking.getUser().getUserId());
         Movie movie = movieService.findMovie(booking.getMovie().getMovieId());
-
         booking.setUser(user);
         booking.setMovie(movie);
 
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+        return booking;
     }
 
     // 예매내역 수정
-    public Booking updateBooking(Long bookingId, String cinema, Integer persons, LocalDateTime showTime) {
+    public Booking update(Long bookingId, String cinema, Integer persons, LocalDateTime showTime) {
         Booking booking = findBooking(bookingId);
         booking.update(cinema, persons, showTime);
         return booking;
     }
 
     // 예매내역 삭제
-    public boolean deleteBooking(Long bookingId) {
+    public boolean delete(Long bookingId) {
         Booking booking = findBooking(bookingId);
         bookingRepository.delete(booking);
         return true;

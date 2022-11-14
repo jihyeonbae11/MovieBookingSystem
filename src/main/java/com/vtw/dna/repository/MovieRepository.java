@@ -13,7 +13,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Page<Movie> findAllByMovieNameContains(Pageable pageable, String searchName);
 
     // 장르별 영화 list 조회를 위한 메소드
-    List<Movie> findByGenre(String genre);
+//    List<Movie> findByGenre(String genre);
 
     // 영화 ID로 영화 조회를 위한 메소드
     Movie findByMovieId(Long movieId);

@@ -1,5 +1,6 @@
 package com.vtw.dna.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,27 +23,27 @@ public class Booking extends CommonDate {
     private Long bookingId;
     private String cinema;
 
-    @Column(nullable = false, length = 10)
+//    @Column(nullable = false, length = 10)
     private int persons;
     private LocalDateTime showTime;
 
     // Booking - User 테이블 조인 (N:1)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
     // Booking - Movie 테이블 조인 (N:1)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "movieId")
     private Movie movie;
 
-//    public Booking(Long bookingId, String userId, Long movieId, String cinema, Integer persons, LocalDateTime showTime) {
-//        this.user = user;
-//        this.movie = movie;
-//        this.cinema = cinema;
-//        this.persons = persons;
-//        this.showTime = showTime;
-//    }
+    public Booking(String userId, Long movieId, String cinema, Integer persons, LocalDateTime showTime) {
+        this.user = user;
+        this.movie = movie;
+        this.cinema = cinema;
+        this.persons = persons;
+        this.showTime = showTime;
+    }
 
     // 예매 변경 시 상영관, 인원 수, 상영시간 변경 가능
     public Booking update(String cinema, int persons, LocalDateTime showTime) {
@@ -53,5 +54,6 @@ public class Booking extends CommonDate {
         return this;
     }
 
-
+    public void setUser(String userId, String s, String s1, LocalDateTime now) {
+    }
 }

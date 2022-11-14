@@ -18,9 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MovieService {
 
-    private final BookingRepository bookingRepository;
     private final MovieRepository movieRepository;
-    private final UserRepository userRepository;
 
     // 영화 제목으로 조회
     public Page<Movie> findMovies(Pageable pageable, String searchName) {
@@ -28,9 +26,9 @@ public class MovieService {
     }
 
     // 장르별 영화 리스트 조회
-    public List<Movie> findGenreMovies(String genre) {
-        return Optional.ofNullable(movieRepository.findByGenre(genre)).orElseThrow(NullPointerException::new);
-    }
+//    public List<Movie> findGenreMovies(String genre) {
+//        return Optional.ofNullable(movieRepository.findByGenre(genre)).orElseThrow(NullPointerException::new);
+//    }
 
     // 영화 ID로 영화를 조회
     public Movie findMovie(Long movieId) {
